@@ -54,12 +54,15 @@ const deleteIssue = id => {
 
 const fetchIssues = () => {
    const issues = JSON.parse(localStorage.getItem('issues'));
+   let countClosedIssue = 0;
    const issuesList = document.getElementById('issuesList');
    issuesList.innerHTML = '';
 
    for (var i = 0; i < issues.length; i++) {
       const { id, description, severity, assignedTo, status } = issues[i];
-
+      if (status === 'Closed') {
+         countClosedIssue += 1;
+      }
       issuesList.innerHTML += `<div class="well">
                               <h6>Issue ID: ${id} </h6>
                               <p><span class="label ${
@@ -67,11 +70,20 @@ const fetchIssues = () => {
                                     ? 'label-success'
                                     : 'label-info'
                               }"> ${status} </span></p>
-                              <h3> ${description} </h3>
+                              <h3 style="text-decoration:${
+                                 status === 'Closed' ? 'line-through' : ''
+                              }">${description}</h3>
                               <p><span class="glyphicon glyphicon-time"></span> ${severity}</p>
                               <p><span class="glyphicon glyphicon-user"></span> ${assignedTo}</p>
                               <a href="#" onclick="setStatusClosed(${id})" class="btn btn-warning">Close</a>
                               <a href="#" onclick="deleteIssue(${id})" class="btn btn-danger">Delete</a>
                               </div>`;
    }
+
+   // issue counter
+   let totalIssue = issues.length;
+   document.getElementById('issue-counter').innerText = totalIssue;
+   //issueLeft
+   document.getElementById('issue-left').innerText =
+      totalIssue - countClosedIssue;
 };
