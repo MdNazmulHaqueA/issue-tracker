@@ -42,10 +42,14 @@ const setStatusClosed = id => {
    fetchIssues();
 };
 
+//Fix 3 : Delete button was not working - 1. problem with type 2. not calling the fetchIssues after deleting
 const deleteIssue = id => {
    const issues = JSON.parse(localStorage.getItem('issues'));
-   const remainingIssues = issues.filter(issue.id !== id);
+   const remainingIssues = issues.filter(issue => Number(issue.id) !== id);
+   //  const remainingIssues = issues.filter(issue.id !== id);
    localStorage.setItem('issues', JSON.stringify(remainingIssues));
+   //fetchIssues missing
+   fetchIssues();
 };
 
 const fetchIssues = () => {
